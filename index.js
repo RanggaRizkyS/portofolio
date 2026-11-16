@@ -42,9 +42,11 @@ app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/vendor/aos', express.static(path.join(__dirname, 'node_modules/aos/dist')));
-app.use('/vendor/sweetalert2', express.static(path.join(__dirname, 'node_modules/sweetalert2/dist')));
-app.use('/vendor/skeleton', express.static(path.join(__dirname, 'node_modules/placeholder-loading/dist/css')));
+const aosDistPath = path.dirname(require.resolve('aos'));
+const swalDistPath = path.dirname(require.resolve('sweetalert2'));
+
+app.use('/vendor/aos', express.static(aosDistPath);
+app.use('/vendor/sweetalert2', express.static(swalDistPath);
 
 app.use(limiter);
 
