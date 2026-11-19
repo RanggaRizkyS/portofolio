@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { REST, Routes, EmbedBuilder } = require('discord.js');
+const { inject } = require('@vercel/analytics');
 
 const app = express();
 
@@ -76,5 +77,7 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
     console.log(`Server berjalan di http://localhost:${PORT}`);
   });
 }
+
+inject();
 
 module.exports = app;
