@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 5,
+  max: 2,
   message: {
     status: 429,
     success: false,
