@@ -4,6 +4,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const { REST, Routes, EmbedBuilder } = require('discord.js');
 const { inject } = require('@vercel/analytics');
+const { Readable } = require('stream');
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 2,
+  max: 5,
   message: {
     status: 429,
     success: false,
@@ -68,6 +69,29 @@ app.post('/send', limiter, async (req, res) => {
       success: false,
       error: 'Gagal mengirim pesan ke Discord.'
     });
+  }
+});
+
+//sitemap
+app.get('/sitemap.xml', async (req, res) => {
+  try {
+    const links = [
+      { url: '/', changefreq: 'daily', priority: 1.0 }
+    ];
+
+    const stream = new SitemapStream({ hostname: 'https://www.ranggarizky.my.id' });
+    res.header('Content-Type', 'application/xml');
+
+    const xmlString = await streamToPromise(Readable.from(links).pipe(stream)).then((data) =>
+      data.toString()
+    );
+
+    res.header('Cache-Control', 's-maxage=86400, stale-while-revalidate');
+
+    res.send(xmlString);
+  } catch (error) {
+    console.error(error);
+    res.status(500).end();
   }
 });
 
