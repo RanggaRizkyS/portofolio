@@ -73,25 +73,29 @@ app.post('/send', limiter, async (req, res) => {
 });
 
 //sitemap
-app.get('/sitemap.xml', async (req, res) => {
+app.get('/sitemap.xml', (req, res) => {
   try {
-    const links = [
-      { url: '/', changefreq: 'daily', priority: 1.0 }
-    ];
+    const sitemap = new SitemapStream({
+      hostname: 'https://www.ranggarizky.my.id'
+    });
 
-    const stream = new SitemapStream({ hostname: 'https://www.ranggarizky.my.id' });
-    res.header('Content-Type', 'application/xml');
+    res.header('Content-Type', 'application/xml; charset=utf-8');
+    res.header('Cache-Control', 'public, max-age=86400');
 
-    const xmlString = await streamToPromise(Readable.from(links).pipe(stream)).then((data) =>
-      data.toString()
-    );
+    sitemap.pipe(res);
 
-    res.header('Cache-Control', 's-maxage=86400, stale-while-revalidate');
+    sitemap.write({
+      url: '/',
+      changefreq: 'daily',
+      priority: 1.0
+    });
 
-    res.send(xmlString);
+    sitemap.end();
   } catch (error) {
-    console.error(error);
-    res.status(500).end();
+    console.error('Sitemap Error:', error);
+    if (!res.headersSent) {
+      res.status(500).send('Unable to generate sitemap');
+    }
   }
 });
 
