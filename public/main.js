@@ -116,6 +116,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    GitHubCalendar(".calendar", "RanggaRizkyS", {
+        tooltips: true,
+        global_stats: true,
+        cache: 86400,
+        cellSize: 12,
+        cellGap: 3,
+        summary_html: `
+            <div class="gc-stats">
+                <article class="gc-stat gc-stat-total">
+                    <strong>{{last_year}}</strong>
+                    <span>Total Contributions</span>
+                </article>
+
+                <article class="gc-stat">
+                    <strong>{{longest_streak}} days</strong>
+                    <span>Longest Streak</span>
+                    <small>{{longest_streak_range}}</small>
+                </article>
+
+                <article class="gc-stat">
+                    <strong>{{current_streak}} days</strong>
+                    <span>Current Streak</span>
+                    <small>{{current_streak_range}}</small>
+                </article>
+            </div>
+
+            <p class="gc-range">
+                Activity from {{date_range}}
+            </p>
+        `
+    });
+    
+
     // Render data dari satu konfigurasi agar konten mudah dirawat.
     function renderSiteFromConfig() {
         const profileImg = $('profileImg');

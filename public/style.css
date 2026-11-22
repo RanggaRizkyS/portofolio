@@ -599,6 +599,7 @@ textarea:focus-visible,
     .sm\:text-base { font-size: 1rem; line-height: 1.5rem; }
     .sm\:text-\[11px\] { font-size: 11px; line-height: 1.5; }
     .sm\:aspect-\[4\/3\] { aspect-ratio: 4 / 3; }
+    .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 @media (min-width: 768px) {

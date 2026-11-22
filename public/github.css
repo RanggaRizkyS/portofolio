@@ -1,0 +1,71 @@
+/* GitHub activity: compact, clean contribution heatmap */
+.calendar {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  color: #e6edf3;
+  font-family: inherit;
+}
+
+.gc-card {
+  width: 100%;
+  padding: clamp(16px, 2.3vw, 26px);
+  border: 1px solid rgba(148, 163, 184, .16);
+  border-radius: 14px;
+  background: rgba(12, 17, 27, .56);
+  box-sizing: border-box;
+}
+
+.gc-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  margin: 0 0 15px;
+  color: #dce3eb;
+  font-size: clamp(14px, 1.7vw, 18px);
+  font-weight: 500;
+  letter-spacing: -.025em;
+}
+.gc-total { font-weight: 650; }
+.gc-graph-wrap { width: 100%; overflow-x: auto; overflow-y: hidden; padding: 0 0 4px; }
+.gc-heatmap {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-width: 680px;
+  overflow: visible;
+}
+.gc-month, .gc-weekday { fill: #8b949e; font-size: 10px; font-family: inherit; }
+.gc-weekday { font-size: 9px; }
+.gc-day { stroke: rgba(255,255,255,.025); stroke-width: .35; transition: stroke .12s ease, opacity .12s ease; cursor: default; }
+.gc-day:hover { stroke: #e6edf3; stroke-width: 1.1; }
+.gc-day.level-0, .gc-legend .level-0 { fill: #202631; background: #202631; }
+.gc-day.level-1, .gc-legend .level-1 { fill: #0e4429; background: #0e4429; }
+.gc-day.level-2, .gc-legend .level-2 { fill: #006d32; background: #006d32; }
+.gc-day.level-3, .gc-legend .level-3 { fill: #26a641; background: #26a641; }
+.gc-day.level-4, .gc-legend .level-4 { fill: #39d353; background: #39d353; }
+.gc-legend { display: flex; justify-content: flex-end; align-items: center; gap: 5px; margin: 8px 1px 0; color: #8b949e; font-size: 11px; line-height: 1; white-space: nowrap; }
+.gc-legend i { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+.gc-legend span:first-child { margin-right: 2px; }
+.gc-legend span:last-child { margin-left: 2px; }
+.gc-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 20px; }
+.gc-stat { min-width: 0; display: flex; flex-direction: column; gap: 5px; padding: 13px 14px; border-radius: 9px; background: rgba(255,255,255,.025); border: 1px solid rgba(148,163,184,.13); }
+.gc-stat strong { color: #edf2f8; font-size: clamp(20px, 2.2vw, 27px); font-weight: 650; letter-spacing: -.045em; line-height: 1.2; }
+.gc-stat span { color: #a4adba; font-size: 12px; }
+.gc-stat small { color: #7d8794; font-size: 11px; line-height: 1.4; }
+.gc-range { margin: 12px 1px 0; color: #7d8794; font-size: 11px; }
+.gc-loading, .gc-empty { color: #8993a1; font-size: 13px; padding: 18px 0; }
+.gc-error { display: flex; flex-direction: column; gap: 6px; color: #fca5a5; padding: 16px; border: 1px solid rgba(248,113,113,.2); border-radius: 10px; background: rgba(127,29,29,.08); }
+.gc-error span { color: #a5aab4; font-size: 12px; }
+.gc-retry { align-self: flex-start; margin-top: 8px; padding: 5px 10px; border: 1px solid rgba(148,163,184,.2); border-radius: 6px; background: transparent; color: inherit; cursor: pointer; }
+.gc-tooltip { position: fixed; z-index: 999999; visibility: hidden; opacity: 0; pointer-events: none; display: flex; flex-direction: column; gap: 3px; padding: 9px 11px; color: #e6edf3; background: #161b22; border: 1px solid rgba(148,163,184,.18); border-radius: 7px; box-shadow: 0 8px 24px rgba(0,0,0,.25); font-size: 12px; transition: opacity .12s ease; white-space: nowrap; }
+.gc-tooltip strong { font-weight: 650; }
+.gc-tooltip span { color: #9da7b3; font-size: 11px; }
+@media (max-width: 650px) {
+  .gc-card { padding: 14px; border-radius: 11px; }
+  .gc-heading { margin-bottom: 11px; }
+  .gc-heatmap { min-width: 640px; }
+  .gc-stats { grid-template-columns: 1fr; gap: 8px; margin-top: 14px; }
+  .gc-stat { padding: 11px 12px; }
+  .gc-stat strong { font-size: 22px; }
+}
