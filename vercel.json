@@ -12,6 +12,10 @@
       "dest": "index.js"
     },
     {
+      "src": "/sitemap.xml",
+      "dest": "index.js"
+    },
+    {
       "src": "/send",
       "dest": "index.js"
     }
