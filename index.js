@@ -78,6 +78,10 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
   });
 }
 
-inject();
+// Initialize Vercel Analytics
+inject({
+  mode: process.env.NODE_ENV || 'production',
+  debug: process.env.NODE_ENV === 'development'
+});
 
 module.exports = app;
