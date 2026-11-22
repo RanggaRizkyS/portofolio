@@ -74,29 +74,19 @@ app.post('/send', limiter, async (req, res) => {
 
 //sitemap
 app.get('/sitemap.xml', (req, res) => {
-  try {
-    const sitemap = new SitemapStream({
-      hostname: 'https://www.ranggarizky.my.id'
-    });
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.ranggarizky.my.id/</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
 
-    res.header('Content-Type', 'application/xml; charset=utf-8');
-    res.header('Cache-Control', 'public, max-age=86400');
-
-    sitemap.pipe(res);
-
-    sitemap.write({
-      url: '/',
-      changefreq: 'daily',
-      priority: 1.0
-    });
-
-    sitemap.end();
-  } catch (error) {
-    console.error('Sitemap Error:', error);
-    if (!res.headersSent) {
-      res.status(500).send('Unable to generate sitemap');
-    }
-  }
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.status(200).send(xml);
 });
 
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
