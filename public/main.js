@@ -1,848 +1,901 @@
+
 'use strict';
 
 document.addEventListener('DOMContentLoaded', () => {
     const $ = (id) => document.getElementById(id);
+    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
 
-    // ---------------------------------------------------------------------
-    // AOS - tetap memakai library lokal yang sudah ada di /vendor/.
-    // ---------------------------------------------------------------------
-    if (typeof AOS !== 'undefined') {
-        AOS.init({ duration: 600, once: true, offset: 100 });
-    }
-
-    // ---------------------------------------------------------------------
-    // DATA WEBSITE
-    // ---------------------------------------------------------------------
     const SITE_CONFIG = {
         profile: {
             name: 'Rangga Rizky Saputra',
-            subtitle: 'Full-Stack Developer & Homelab Hobbiest',
-            roleBadge: 'PLAYER 1 • CREATOR',
-            levelBadge: 'LVL 99',
             avatarUrl: '/img/profile.jpeg',
-            aboutMeParagraphs: [
-                'Hallo! Saya Rangga Rizky, Saya adalah seorang Full-Stack Developer dan cukup paham tentang Server. Journey saya bermula pada kelas 6 SD, Saat maraknya pandemi di masa itu, Saya memutuskan untuk mencoba membuat server minecraft bernama Frost Network. Pada awalnya saya hanya membuat server itu dan membuat community yang dulu cukup dikenal di komunitas minecraft pe, Tetapi saat menginjak kelas 1 SMP, Saya mulai tertarik dengan Plugin dan Website, Awalnya saya memulai Journey saya dengan membuat Project sederhana seperti Plugin UI Customize, GUI Customize, Front-End Website Hosting Store, Website Server Minecraft saya, dan project lainnya. Sekarang saya adalah Full-Stack Web Developer, Creator Plugin Minecraft, khusus untuk Software Paper, NodeJS Specialist. Kedepannya harapan saya terhadap diri saya yaitu lebih berkembang di bidang Programming dan memelajari lebih banyak Framework dan Coding Languages lainnya.'
-            ],
             typingPhrases: [
-                'Homelab Hobbiest',
+                'Homelab Enthusiast',
                 'Full-Stack Web Developer',
-                'NodeJS Specialist',
+                'Node.js Specialist',
                 'I Love NPM',
-                'Aspiring To Build a Data Center'
+                'Aspiring to Build a Data Center'
             ]
         },
-        sidebarNav: [
-            { id: 'about', label: '01. ABOUT ME', icon: 'fa-user', color: 'text-arcade-yellow' },
-            { id: 'skills', label: '02. SKILLS', icon: 'fa-bolt', color: 'text-arcade-green' },
-            { id: 'experience', label: '03. ERROR LOG', icon: 'fa-scroll', color: 'text-arcade-cyan' },
-            { id: 'minigame', label: '04. MINI GAME', icon: 'fa-gamepad', color: 'text-arcade-yellow' }
+
+        techStack: {
+            frontend: [
+                { id: 'html5', name: 'HTML5', icon: 'fa-brands fa-html5' },
+                { id: 'css3', name: 'CSS3', icon: 'fa-brands fa-css3-alt' },
+                { id: 'javascript', name: 'JavaScript', icon: 'fa-brands fa-js' },
+                { id: 'tailwind', name: 'Tailwind CSS', icon: 'fa-solid fa-wind' },
+                { id: 'bootstrap', name: 'Bootstrap', icon: 'fa-brands fa-bootstrap' },
+                { id: 'aos', name: 'AOS', icon: 'fa-solid fa-wand-magic-sparkles' }
+            ],
+
+            backend: [
+                { id: 'nodejs', name: 'Node.js', icon: 'fa-brands fa-node-js' },
+                { id: 'express', name: 'Express.js', icon: 'fa-solid fa-server' },
+                { id: 'mariadb', name: 'MariaDB', icon: 'fa-solid fa-database' },
+                { id: 'mongodb', name: 'MongoDB', icon: 'fa-solid fa-leaf' },
+                { id: 'java', name: 'Java', icon: 'fa-brands fa-java' },
+                { id: 'python', name: 'Python', icon: 'fa-brands fa-python' },
+                { id: 'docker', name: 'Docker', icon: 'fa-brands fa-docker' },
+                { id: 'linux', name: 'Linux', icon: 'fa-brands fa-linux' },
+                { id: 'proxmox', name: 'Proxmox', icon: 'fa-solid fa-cubes-stacked' },
+                { id: 'pterodactyl', name: 'Pterodactyl', icon: 'fa-solid fa-gamepad' }
+            ]
+        },
+
+        experience: [
+            {
+                date: '01 / PRESENT',
+                type: 'DEVELOPMENT',
+                title: 'Full-Stack Web Developer',
+                subtitle: 'Independent',
+                description: 'Pengembangan website dan aplikasi berbasis Express.js.'
+            },
+            {
+                date: '02 / HOMELAB',
+                type: 'INFRASTRUCTURE',
+                title: 'Home Lab System Architect',
+                subtitle: 'Personal Server',
+                description: 'Mengelola server rumahan dengan basis Proxmox dan layanan self-hosted.'
+            },
+            {
+                date: '03 / CLI',
+                type: 'SOFTWARE',
+                title: 'CLI Script Developer',
+                subtitle: 'Command Line Tools',
+                description: 'Mengembangkan aplikasi dan utility berbasis command line.'
+            },
+            {
+                date: '04 / GAME SERVER',
+                type: 'COMMUNITY',
+                title: 'Owner Server Minecraft',
+                subtitle: 'Minecraft Server',
+                description: 'Merancang server Minecraft serta mengelola kebutuhan komunitas.'
+            },
+            {
+                date: '05 / DATABASE',
+                type: 'DATA',
+                title: 'Database Engineer',
+                subtitle: 'Local Network',
+                description: 'Menyusun struktur database dan mengelola database berskala menengah.'
+            }
         ],
-        skillsSection: {
-            subtitle: 'Tingkat penguasaan teknologi & keahlian sistem',
-            categories: [
-                {
-                    categoryTitle: 'CODING LANGUAGES I LOVE THE MOST',
-                    icon: 'fa-code',
-                    titleColor: 'text-arcade-yellow',
-                    skills: [
-                        { name: 'NODE.JS', level: 100, color: 'bg-arcade-green', textColor: 'text-arcade-green' },
-                        { name: 'JAVASCRIPT', level: 85, color: 'bg-arcade-cyan', textColor: 'text-arcade-cyan' },
-                        { name: 'BASH', level: 35, color: 'bg-arcade-yellow', textColor: 'text-arcade-yellow' },
-                        { name: 'JAVA', level: 20, color: 'bg-arcade-amber', textColor: 'text-arcade-amber' },
-                        { name: 'PYTHON', level: 1, color: 'bg-red-600', textColor: 'text-red-500' }
-                    ]
-                },
-                {
-                    categoryTitle: 'SERVERS SOFTWARE',
-                    icon: 'fa-server',
-                    titleColor: 'text-arcade-cyan',
-                    skills: [
-                        { name: 'LINUX UBUNTU', level: 99, color: 'bg-arcade-green', textColor: 'text-arcade-green' },
-                        { name: 'PTERODACTYL', level: 95, color: 'bg-arcade-green', textColor: 'text-arcade-green' },
-                        { name: 'MONGODB', level: 75, color: 'bg-arcade-cyan', textColor: 'text-arcade-cyan' },
-                        { name: 'MARIADB', level: 65, color: 'bg-arcade-cyan', textColor: 'text-arcade-cyan' },
-                        { name: 'DOCKER', level: 40, color: 'bg-arcade-yellow', textColor: 'text-arcade-yellow' }
-                    ]
-                }
-            ]
-        },
-        questLog: {
-            subtitle: 'Riwayat error, eksperimen, dan milestone',
-            items: [
-                {
-                    num: 1,
-                    tag: 'ERR_LOG_1 • PRESENT',
-                    tagColor: 'text-arcade-cyan border-arcade-cyan',
-                    title: 'Full-Stack Web Developer',
-                    subtitle: 'Independent',
-                    description: 'Pengembangan website berbasis Express JS.'
-                },
-                {
-                    num: 2,
-                    tag: 'ERR_LOG_2 • HOMELAB',
-                    tagColor: 'text-arcade-yellow border-arcade-yellow',
-                    title: 'Home Lab System Architect',
-                    subtitle: 'Personal Server',
-                    description: 'Mengelola server rumahan dengan basis Proxmox.'
-                },
-                {
-                    num: 3,
-                    tag: 'ERR_LOG_3 • CLI',
-                    tagColor: 'text-arcade-amber border-arcade-amber',
-                    title: 'CLI Script',
-                    subtitle: 'CLI Script Developer',
-                    description: 'Mengembangkan aplikasi berbasis CLI.'
-                },
-                {
-                    num: 4,
-                    tag: 'ERR_LOG_4 • OWNER SERVER',
-                    tagColor: 'text-arcade-green border-arcade-green',
-                    title: 'Owner Server Minecraft',
-                    subtitle: 'Owner Server Minecraft',
-                    description: 'Merancang server dan menghandle komunitas.'
-                },
-                {
-                    num: 5,
-                    tag: 'ERR_LOG_5 • DATABASE',
-                    tagColor: 'text-arcade-cyan border-arcade-cyan',
-                    title: 'Database Engineer',
-                    subtitle: 'Database Engineer For Local Network',
-                    description: 'Menyusun database dan mengelola database berskala menengah.'
-                }
-            ]
-        },
-        contactSection: {
-            subtitle: 'Kirimkan pesan atau tawaran proyek langsung ke sistem saya'
+
+        projects: {
+            countryFlagGuesser: {
+                title: 'Country Flag Guesser',
+                category: 'Web Application',
+                url: 'https://country-flag-guesser.vercel.app',
+                description: 'Menebak negara berdasarkan bendera yang ditampilkan.'
+            }
         }
     };
 
-    GitHubCalendar(".calendar", "RanggaRizkyS", {
-        tooltips: true,
-        global_stats: true,
-        cache: 86400,
-        cellSize: 12,
-        cellGap: 3,
-        summary_html: `
-            <div class="gc-stats">
-                <article class="gc-stat gc-stat-total">
-                    <strong>{{last_year}}</strong>
-                    <span>Total Contributions</span>
-                </article>
+    // ---------------------------------------------------------------
+    // AOS
+    // ---------------------------------------------------------------
 
-                <article class="gc-stat">
-                    <strong>{{longest_streak}} days</strong>
-                    <span>Longest Streak</span>
-                    <small>{{longest_streak_range}}</small>
-                </article>
-
-                <article class="gc-stat">
-                    <strong>{{current_streak}} days</strong>
-                    <span>Current Streak</span>
-                    <small>{{current_streak_range}}</small>
-                </article>
-            </div>
-
-            <p class="gc-range">
-                Activity from {{date_range}}
-            </p>
-        `
-    });
-    
-
-    // Render data dari satu konfigurasi agar konten mudah dirawat.
-    function renderSiteFromConfig() {
-        const profileImg = $('profileImg');
-        if (profileImg) profileImg.src = SITE_CONFIG.profile.avatarUrl;
-
-        const profileFields = {
-            playerName: SITE_CONFIG.profile.name,
-            playerSubtitle: SITE_CONFIG.profile.subtitle,
-            playerRoleBadge: SITE_CONFIG.profile.roleBadge,
-            playerLevelBadge: SITE_CONFIG.profile.levelBadge,
-            skillsDesc: SITE_CONFIG.skillsSection.subtitle,
-            questLogSubtitle: SITE_CONFIG.questLog.subtitle,
-            contactDesc: SITE_CONFIG.contactSection.subtitle
-        };
-
-        Object.entries(profileFields).forEach(([id, value]) => {
-            const element = $(id);
-            if (element) element.textContent = value;
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 850,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 90,
+            mirror: false,
+            disable: prefersReducedMotion
         });
-
-        const aboutContainer = $('aboutMeText');
-        if (aboutContainer) {
-            const wrapper = document.createElement('div');
-            wrapper.id = 'aboutTextWrapper';
-            wrapper.className = 'about-desc-wrapper';
-
-            SITE_CONFIG.profile.aboutMeParagraphs.forEach((paragraph) => {
-                const p = document.createElement('p');
-                p.textContent = paragraph;
-                wrapper.appendChild(p);
-            });
-
-            aboutContainer.replaceChildren(wrapper);
-        }
-
-        const sidebarNav = $('sidebarNav');
-        if (sidebarNav) {
-            sidebarNav.innerHTML = SITE_CONFIG.sidebarNav.map((item) => `
-                <a href="#${item.id}" class="nav-link block p-3 rounded-lg bg-white/5 border border-white/10 hover:border-arcade-yellow text-white transition flex items-center justify-between group cursor-pointer">
-                    <span class="group-hover:text-arcade-yellow flex items-center gap-3">
-                        <i class="fa-solid ${item.icon} ${item.color}" aria-hidden="true"></i>
-                        ${item.label}
-                    </span>
-                    <i class="fa-solid fa-chevron-right text-gray-500 group-hover:text-arcade-yellow" aria-hidden="true"></i>
-                </a>
-            `).join('');
-        }
-
-        const skillsContainer = $('skillsContainer');
-        if (skillsContainer) {
-            skillsContainer.innerHTML = SITE_CONFIG.skillsSection.categories.map((category, categoryIndex) => {
-                const aosEffect = categoryIndex % 2 === 0 ? 'fade-right' : 'fade-left';
-                const skillMarkup = category.skills.map((skill) => `
-                    <div class="space-y-1.5">
-                        <div class="flex justify-between font-pixel text-[10px] text-gray-300">
-                            <span>${skill.name}</span>
-                            <span class="${skill.textColor}">LVL ${skill.level}%</span>
-                        </div>
-                        <div class="w-full bg-black/60 rounded-full h-3 border border-white/10 overflow-hidden p-0.5" role="progressbar" aria-label="${skill.name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${skill.level}">
-                            <div class="${skill.color} h-full rounded-full shadow-lg" style="width:${skill.level}%"></div>
-                        </div>
-                    </div>
-                `).join('');
-
-                return `
-                    <article class="glass-card-grey p-6 rounded-2xl space-y-4" data-aos="${aosEffect}">
-                        <h3 class="font-pixel text-xs ${category.titleColor} flex items-center gap-2">
-                            <i class="fa-solid ${category.icon}" aria-hidden="true"></i>
-                            ${category.categoryTitle}
-                        </h3>
-                        ${skillMarkup}
-                    </article>
-                `;
-            }).join('');
-        }
-
-        const questContainer = $('questLogContainer');
-        if (questContainer) {
-            questContainer.innerHTML = SITE_CONFIG.questLog.items.map((quest, index) => {
-                const isReverse = index % 2 !== 0;
-                const aosDirection = isReverse ? 'fade-left' : 'fade-right';
-                return `
-                    <article class="relative flex flex-col ${isReverse ? 'md:flex-row-reverse' : 'md:flex-row'} items-center justify-between group" data-aos="${aosDirection}">
-                        <div class="w-full md:w-[45%] glass-card-grey p-5 rounded-2xl quest_div">
-                            <span class="font-pixel text-[9px] ${quest.tagColor} bg-black/60 px-2 py-1 rounded border">
-                                ${quest.tag}
-                            </span>
-                            <h3 class="font-pixel text-sm text-white mt-2">${quest.title}</h3>
-                            <p class="text-xs text-arcade-yellow font-terminal text-base">${quest.subtitle}</p>
-                            <p class="text-xs text-gray-300 mt-2">${quest.description}</p>
-                        </div>
-                        <div class="timeline-number absolute left-4 md:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full glass-card-yellow border border-arcade-yellow flex items-center justify-center font-pixel text-xs text-arcade-yellow my-4 md:my-0" aria-hidden="true">
-                            ${quest.num}
-                        </div>
-                        <div class="hidden md:block w-[45%]" aria-hidden="true"></div>
-                    </article>
-                `;
-            }).join('');
-        }
     }
 
-    renderSiteFromConfig();
+    // ---------------------------------------------------------------
+    // RENDER TECH STACK
+    // ---------------------------------------------------------------
 
-    // Refresh AOS after dynamic content has been inserted.
+    function renderTechItems(containerId, items) {
+        const container = $(containerId);
+        if (!container) return;
+
+        container.innerHTML = items.map((item, index) => `
+            <button
+                class="tech-item"
+                type="button"
+                data-tech-item
+                data-tech-id="${item.id}"
+                aria-label="${item.name}. Geser untuk mengatur urutan. Gunakan tombol panah untuk memindahkan dengan keyboard."
+                title="Drag untuk mengatur posisi"
+                data-aos="fade-up"
+                data-aos-delay="${index * 35}"
+            >
+                <span class="tech-item__icon">
+                    <i class="${item.icon}" aria-hidden="true"></i>
+                </span>
+
+                <span class="tech-item__name">${item.name}</span>
+
+                <span class="tech-item__grip" aria-hidden="true">
+                    <i class="fa-solid fa-grip-vertical"></i>
+                </span>
+            </button>
+        `).join('');
+    }
+
+    function renderTechStack() {
+        renderTechItems(
+            'frontendTechList',
+            SITE_CONFIG.techStack.frontend
+        );
+
+        renderTechItems(
+            'backendTechList',
+            SITE_CONFIG.techStack.backend
+        );
+    }
+
+    // ---------------------------------------------------------------
+    // RENDER EXPERIENCE
+    // ---------------------------------------------------------------
+
+    function renderExperience() {
+        const container = $('questLogContainer');
+        if (!container) return;
+
+        container.innerHTML = SITE_CONFIG.experience.map((item, index) => `
+            <article
+                class="timeline-item"
+                data-aos="fade-up"
+                data-aos-delay="${index * 70}"
+            >
+                <span class="timeline-marker" aria-hidden="true">
+                    ${String(index + 1).padStart(2, '0')}
+                </span>
+
+                <div class="timeline-card">
+                    <div class="timeline-card__meta">
+                        <span>${item.date}</span>
+                        <span>${item.type}</span>
+                    </div>
+
+                    <h3>${item.title}</h3>
+
+                    <div class="timeline-card__subtitle">
+                        ${item.subtitle}
+                    </div>
+
+                    <p>${item.description}</p>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    renderTechStack();
+    renderExperience();
+
     if (typeof AOS !== 'undefined') {
         AOS.refreshHard ? AOS.refreshHard() : AOS.refresh();
     }
 
-    // ---------------------------------------------------------------------
-    // ABOUT: expandable description (mouse + keyboard).
-    // ---------------------------------------------------------------------
-    const aboutContainer = $('aboutMeText');
-    const aboutToggleHint = $('aboutToggleHint');
+    // ---------------------------------------------------------------
+    // GITHUB CONTRIBUTION CALENDAR
+    // ---------------------------------------------------------------
 
-    function toggleAboutDescription() {
-        if (!aboutContainer) return;
-        const isCollapsed = aboutContainer.classList.contains('about-desc-collapsed');
-        aboutContainer.classList.toggle('about-desc-collapsed', !isCollapsed);
-        aboutContainer.classList.toggle('about-desc-expanded', isCollapsed);
-        aboutContainer.setAttribute('aria-expanded', String(isCollapsed));
+    const calendar = document.querySelector('.calendar');
 
-        if (aboutToggleHint) {
-            aboutToggleHint.textContent = isCollapsed
-                ? '▲ KLIK TEKS UNTUK MENUTUP KEMBALI'
-                : '▼ KLIK TEKS UNTUK BACA SELENGKAPNYA';
+    if (calendar && typeof window.GitHubCalendar === 'function') {
+        try {
+            GitHubCalendar('.calendar', 'RanggaRizkyS', {
+                tooltips: true,
+                global_stats: true,
+                cache: 86400,
+                cellSize: 12,
+                cellGap: 3,
+
+                summary_html: `
+                    <div class="gc-stats">
+                        <article class="gc-stat gc-stat-total">
+                            <strong>{{last_year}}</strong>
+                            <span>Total Contributions</span>
+                        </article>
+
+                        <article class="gc-stat">
+                            <strong>{{longest_streak}} days</strong>
+                            <span>Longest Streak</span>
+                            <small>{{longest_streak_range}}</small>
+                        </article>
+
+                        <article class="gc-stat">
+                            <strong>{{current_streak}} days</strong>
+                            <span>Current Streak</span>
+                            <small>{{current_streak_range}}</small>
+                        </article>
+                    </div>
+
+                    <p class="gc-range">
+                        Activity from {{date_range}}
+                    </p>
+                `
+            });
+        } catch (error) {
+            console.error('GitHub Calendar gagal dimuat:', error);
+            calendar.textContent =
+                'GitHub activity belum dapat dimuat. Silakan kunjungi profil GitHub.';
         }
+    } else if (calendar) {
+        calendar.textContent =
+            'GitHub activity belum dapat dimuat. Periksa file /github.js.';
     }
 
-    if (aboutContainer) {
-        aboutContainer.addEventListener('click', toggleAboutDescription);
-        aboutContainer.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleAboutDescription();
-            }
-        });
-    }
+    // ---------------------------------------------------------------
+    // ABOUT TEXT EXPAND / COLLAPSE
+    // ---------------------------------------------------------------
 
-    // ---------------------------------------------------------------------
-    // SIDEBAR MENU.
-    // ---------------------------------------------------------------------
-    const sidebar = $('arcadeSidebar');
-    const sidebarPanel = $('sidebarPanel');
-    const sidebarToggleBtn = $('sidebarToggleBtn');
-    const sidebarCloseBtn = $('sidebarCloseBtn');
-    const sidebarBackdrop = $('sidebarBackdrop');
-    let sidebarIsOpen = false;
+    const aboutText = $('aboutMeText');
+    const aboutMoreButton = $('aboutMore');
 
-    function openSidebar() {
-        if (!sidebar || !sidebarPanel || !sidebarBackdrop) return;
-        sidebarIsOpen = true;
-        sidebar.inert = false;
-        sidebar.classList.remove('sidebar-closed', 'pointer-events-none');
-        sidebarPanel.classList.remove('pointer-events-none');
-        sidebarBackdrop.classList.remove('pointer-events-none', 'opacity-0');
-        sidebarBackdrop.classList.add('opacity-100');
-        sidebar.setAttribute('aria-hidden', 'false');
-        sidebarToggleBtn?.setAttribute('aria-expanded', 'true');
-        document.body.classList.add('menu-open');
-        sidebarCloseBtn?.focus();
-        playRetroBeep(440, 0.1);
-    }
+    aboutMoreButton?.addEventListener('click', () => {
+        const expanded =
+            aboutMoreButton.getAttribute('aria-expanded') === 'true';
 
-    function closeSidebar(restoreFocus = true) {
-        if (!sidebar || !sidebarPanel || !sidebarBackdrop || !sidebarIsOpen) return;
-        sidebarIsOpen = false;
-        sidebar.inert = true;
-        sidebar.classList.add('sidebar-closed');
-        sidebarBackdrop.classList.remove('opacity-100');
-        sidebarBackdrop.classList.add('opacity-0');
-        sidebar.setAttribute('aria-hidden', 'true');
-        sidebarToggleBtn?.setAttribute('aria-expanded', 'false');
-        document.body.classList.remove('menu-open');
+        aboutMoreButton.setAttribute(
+            'aria-expanded',
+            String(!expanded)
+        );
 
-        window.setTimeout(() => {
-            if (!sidebarIsOpen) sidebar.classList.add('pointer-events-none');
-        }, 420);
+        aboutText?.classList.toggle('is-expanded', !expanded);
 
-        if (restoreFocus) sidebarToggleBtn?.focus();
-        playRetroBeep(330, 0.1);
-    }
-
-    sidebarToggleBtn?.addEventListener('click', (event) => {
-        event.stopPropagation();
-        sidebarIsOpen ? closeSidebar(false) : openSidebar();
+        aboutMoreButton.innerHTML = expanded
+            ? 'Read more <i class="fa-solid fa-arrow-down" aria-hidden="true"></i>'
+            : 'Show less <i class="fa-solid fa-arrow-up" aria-hidden="true"></i>';
     });
 
-    sidebarCloseBtn?.addEventListener('click', () => closeSidebar());
-    sidebarBackdrop?.addEventListener('click', () => closeSidebar());
-    $('sidebarNav')?.addEventListener('click', (event) => {
-        if (event.target.closest('.nav-link')) closeSidebar(false);
-    });
+    // ---------------------------------------------------------------
+    // TYPING EFFECT
+    // ---------------------------------------------------------------
 
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && sidebarIsOpen) closeSidebar();
-    });
-
-    // ---------------------------------------------------------------------
-    // TYPING EFFECT. Respects reduced-motion and pauses while the tab is hidden.
-    // ---------------------------------------------------------------------
     const typingElement = $('typingText');
     const phrases = SITE_CONFIG.profile.typingPhrases;
+
     let phraseIndex = 0;
     let characterIndex = 0;
-    let isDeleting = false;
+    let deleting = false;
     let typingTimer = null;
-    const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-    function typeLoop() {
+    function typeNext() {
         if (!typingElement || document.hidden) return;
-        const currentPhrase = phrases[phraseIndex];
 
-        if (isDeleting) {
-            characterIndex -= 1;
-            typingElement.textContent = currentPhrase.substring(0, characterIndex);
-        } else {
-            characterIndex += 1;
-            typingElement.textContent = currentPhrase.substring(0, characterIndex);
-        }
+        const phrase = phrases[phraseIndex];
 
-        let delay = isDeleting ? 30 : 60;
-        if (!isDeleting && characterIndex === currentPhrase.length) {
-            delay = 2000;
-            isDeleting = true;
-        } else if (isDeleting && characterIndex === 0) {
-            isDeleting = false;
+        characterIndex += deleting ? -1 : 1;
+
+        typingElement.textContent = phrase.slice(0, characterIndex);
+
+        let delay = deleting ? 27 : 55;
+
+        if (!deleting && characterIndex === phrase.length) {
+            deleting = true;
+            delay = 1900;
+        } else if (deleting && characterIndex === 0) {
+            deleting = false;
             phraseIndex = (phraseIndex + 1) % phrases.length;
-            delay = 500;
+            delay = 400;
         }
 
-        typingTimer = window.setTimeout(typeLoop, delay);
+        typingTimer = window.setTimeout(typeNext, delay);
     }
 
     if (typingElement) {
         if (prefersReducedMotion) {
             typingElement.textContent = phrases[0];
         } else {
-            typeLoop();
+            typeNext();
         }
     }
 
     document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            window.clearTimeout(typingTimer);
-        } else if (!prefersReducedMotion && typingElement) {
-            typeLoop();
+        window.clearTimeout(typingTimer);
+
+        if (!document.hidden && !prefersReducedMotion && typingElement) {
+            typeNext();
         }
     });
 
-    // ---------------------------------------------------------------------
-    // RETRO AUDIO (Web Audio API; starts muted until the visitor opts in).
-    // ---------------------------------------------------------------------
-    let audioContext = null;
-    let audioMuted = true;
-    const toggleAudioBtn = $('toggleAudioBtn');
-    const audioStatus = $('audioStatus');
-    const audioIcon = $('audioIcon');
+    // ---------------------------------------------------------------
+    // SCROLL UI + NAVIGATION ACTIVE STATE
+    // ---------------------------------------------------------------
 
-    function initAudio() {
-        if (audioContext) return audioContext;
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return null;
-        audioContext = new AudioContextClass();
-        if (audioContext.state === 'suspended') audioContext.resume().catch(() => {});
-        return audioContext;
-    }
+    const siteHeader = $('siteHeader');
+    const heroSection = $('about');
+    const techStackSection = $('tech-stack');
+    const progressBar = $('readingProgress');
 
-    function playRetroBeep(frequency, duration) {
-        if (audioMuted) return;
-        try {
-            const context = initAudio();
-            if (!context) return;
+    const navLinks = [
+        ...document.querySelectorAll('[data-nav-link]')
+    ];
 
-            const oscillator = context.createOscillator();
-            const gain = context.createGain();
-            oscillator.type = 'square';
-            oscillator.frequency.setValueAtTime(frequency, context.currentTime);
-            gain.gain.setValueAtTime(0.05, context.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + duration);
-            oscillator.connect(gain);
-            gain.connect(context.destination);
-            oscillator.start();
-            oscillator.stop(context.currentTime + duration);
-        } catch (error) {
-            // Audio is decorative; unsupported devices should not break the page.
-        }
-    }
+    const mobileNavLinks = [
+        ...document.querySelectorAll('[data-menu-link]')
+    ];
 
-    toggleAudioBtn?.addEventListener('click', () => {
-        audioMuted = !audioMuted;
-        if (!audioMuted) {
-            initAudio();
-            if (audioStatus) {
-                audioStatus.textContent = 'ENABLED';
-                audioStatus.className = 'text-arcade-green';
-            }
-            if (audioIcon) audioIcon.className = 'fa-solid fa-volume-high';
-            playRetroBeep(600, 0.1);
-        } else {
-            if (audioStatus) {
-                audioStatus.textContent = 'MUTED';
-                audioStatus.className = 'text-arcade-yellow';
-            }
-            if (audioIcon) audioIcon.className = 'fa-solid fa-volume-xmark';
-        }
-    });
+    const observedSections = [
+        ...document.querySelectorAll('.page-section[id]')
+    ];
 
-    // ---------------------------------------------------------------------
-    // GAME: Alien Shooter. Keeps auto-fire, keyboard, touch joystick, score,
-    // high score, alien difficulty, hit effects, and retro sounds.
-    // ---------------------------------------------------------------------
-    const canvas = $('spaceGameCanvas');
-    const context = canvas?.getContext('2d', { alpha: false });
-    const startOverlay = $('gameStartOverlay');
-    const startGameBtn = $('startGameBtn');
-    const gameHighScoreEl = $('gameHighScore');
-    const overlayTitle = $('overlayTitle');
-    const overlaySubtitle = $('overlaySubtitle');
+    let scrollTicking = false;
 
-    let highScore = 0;
-    try {
-        highScore = Number.parseInt(localStorage.getItem('highScore') || '0', 10) || 0;
-        if (gameHighScoreEl) gameHighScoreEl.textContent = String(highScore);
-    } catch (error) {
-        highScore = 0;
-    }
+    function updateActiveNavigation() {
+        if (!observedSections.length) return;
 
-    let gameWidth = 0;
-    let gameHeight = 0;
-    let gameDpr = 1;
-    let animationFrameId = 0;
-    let gameRunning = false;
-    let score = 0;
-    let lastShotTime = 0;
-    let playerBullets = [];
-    let alienEnemies = [];
-    let explosions = [];
-
-    const playerShip = {
-        x: 0,
-        y: 0,
-        width: 32,
-        height: 32,
-        speed: 8,
-        vx: 0,
-        vy: 0
-    };
-
-    function resizeCanvas() {
-        if (!canvas || !context) return;
-        const rect = canvas.parentElement.getBoundingClientRect();
-        gameWidth = Math.max(1, Math.floor(rect.width));
-        gameHeight = Math.max(1, Math.floor(rect.height));
-        gameDpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        const pixelWidth = Math.round(gameWidth * gameDpr);
-        const pixelHeight = Math.round(gameHeight * gameDpr);
-        if (canvas.width !== pixelWidth || canvas.height !== pixelHeight) {
-            canvas.width = pixelWidth;
-            canvas.height = pixelHeight;
-        }
-        context.setTransform(gameDpr, 0, 0, gameDpr, 0, 0);
-
-        playerShip.x = Math.max(0, Math.min(playerShip.x || gameWidth / 2 - 16, gameWidth - playerShip.width));
-        playerShip.y = Math.max(0, Math.min(playerShip.y || gameHeight - 50, gameHeight - playerShip.height));
-        if (!gameRunning) drawGame();
-    }
-
-    function spawnAlien() {
-        if (alienEnemies.length >= 7 || gameWidth <= 0) return;
-        const size = Math.random() * 12 + 24;
-        const speedFactor = 1 + Math.min(score / 4000, 1.5);
-        alienEnemies.push({
-            x: Math.random() * Math.max(1, gameWidth - size),
-            y: -size,
-            width: size,
-            height: size,
-            speed: (Math.random() * 1 + 1) * speedFactor,
-            hp: score > 3000 && Math.random() > 0.7 ? 2 : 1,
-            color: score > 3000 ? '#ff9900' : '#ffe600'
-        });
-    }
-
-    function resetGame() {
-        score = 0;
-        playerBullets = [];
-        alienEnemies = [];
-        explosions = [];
-        playerShip.x = gameWidth / 2 - playerShip.width / 2;
-        playerShip.y = gameHeight - 50;
-        playerShip.vx = 0;
-        playerShip.vy = 0;
-        lastShotTime = performance.now();
-        keysHeld.clear();
-        resetJoystick();
-    }
-
-    function handleAutoShoot() {
-        const now = performance.now();
-        if (now - lastShotTime >= 100) {
-            lastShotTime = now;
-            playerBullets.push(
-                { x: playerShip.x + 4, y: playerShip.y, width: 4, height: 12, speed: 8 },
-                { x: playerShip.x + playerShip.width - 8, y: playerShip.y, width: 4, height: 12, speed: 8 }
-            );
-            playRetroBeep(750, 0.04);
-        }
-    }
-
-    function drawGame() {
-        if (!context || gameWidth <= 0 || gameHeight <= 0) return;
-        context.clearRect(0, 0, gameWidth, gameHeight);
-        context.fillStyle = '#05070b';
-        context.fillRect(0, 0, gameWidth, gameHeight);
-
-        // Background stars are deterministic to avoid allocating random data per frame.
-        context.fillStyle = '#ffffff';
-        const starOffset = (performance.now() * 0.08) % gameHeight;
-        for (let index = 0; index < 20; index += 1) {
-            const starX = (index * 43) % gameWidth;
-            const starY = (index * 71 + starOffset) % gameHeight;
-            context.fillRect(starX, starY, 2, 2);
-        }
-
-        // Player ship.
-        context.fillStyle = '#ffe600';
-        context.beginPath();
-        context.moveTo(playerShip.x + playerShip.width / 2, playerShip.y);
-        context.lineTo(playerShip.x + playerShip.width, playerShip.y + playerShip.height);
-        context.lineTo(playerShip.x + playerShip.width / 2, playerShip.y + playerShip.height - 6);
-        context.lineTo(playerShip.x, playerShip.y + playerShip.height);
-        context.closePath();
-        context.fill();
-
-        context.fillStyle = '#00f3ff';
-        context.fillRect(
-            playerShip.x + playerShip.width / 2 - 3,
-            playerShip.y + playerShip.height - 4,
-            6,
-            8 + (gameRunning ? Math.random() * 4 : 2)
+        // Selalu hitung ulang dari posisi aktual section.
+        // Ini bekerja ketika scrolling ke bawah maupun ke atas.
+        const activationLine = Math.min(
+            window.innerHeight * 0.42,
+            260
         );
 
-        context.fillStyle = '#39ff14';
-        playerBullets.forEach((bullet) => {
-            context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-        });
+        let activeSection = observedSections[0];
 
-        alienEnemies.forEach((alien) => {
-            context.fillStyle = alien.color;
-            context.beginPath();
-            context.arc(alien.x + alien.width / 2, alien.y + alien.height / 3, alien.width / 2, 0, Math.PI * 2);
-            context.fill();
-            context.fillStyle = '#000000';
-            context.fillRect(alien.x + 6, alien.y + 6, 4, 4);
-            context.fillRect(alien.x + alien.width - 10, alien.y + 6, 4, 4);
-        });
-
-        explosions.forEach((explosion) => {
-            context.strokeStyle = '#ff9900';
-            context.lineWidth = 2;
-            context.beginPath();
-            context.arc(explosion.x, explosion.y, explosion.radius, 0, Math.PI * 2);
-            context.stroke();
-        });
-
-        context.font = '10px "Press Start 2P", monospace';
-        context.fillStyle = '#39ff14';
-        context.fillText(`ALIENS DESTROYED: ${Math.floor(score / 150)}`, 10, 25);
-        context.fillText(`SCORE: ${score}`, 10, 42);
-    }
-
-    function gameOver() {
-        if (!gameRunning) return;
-        gameRunning = false;
-        window.cancelAnimationFrame(animationFrameId);
-
-        if (score > highScore) {
-            highScore = score;
-            if (gameHighScoreEl) gameHighScoreEl.textContent = String(highScore);
-            try {
-                localStorage.setItem('highScore', String(highScore));
-            } catch (error) {
-                // The current session still keeps the score if storage is unavailable.
-            }
-        }
-
-        if (startOverlay) startOverlay.classList.remove('hidden');
-        if (overlayTitle) overlayTitle.textContent = 'GAME OVER';
-        if (overlaySubtitle) {
-            overlaySubtitle.textContent = `FINAL SCORE: ${score} (${Math.floor(score / 150)} Aliens Kills)`;
-        }
-        drawGame();
-        playRetroBeep(150, 0.4);
-    }
-
-    function updateGame() {
-        if (!gameRunning) return;
-        handleAutoShoot();
-
-        playerShip.x += playerShip.vx;
-        playerShip.y += playerShip.vy;
-        playerShip.x = Math.max(0, Math.min(playerShip.x, gameWidth - playerShip.width));
-        playerShip.y = Math.max(0, Math.min(playerShip.y, gameHeight - playerShip.height));
-
-        // Reverse iteration prevents skipped objects when removing from arrays.
-        for (let bulletIndex = playerBullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
-            const bullet = playerBullets[bulletIndex];
-            bullet.y -= bullet.speed;
-            if (bullet.y < -20) playerBullets.splice(bulletIndex, 1);
-        }
-
-        if (Math.random() < 0.012 + Math.min(score / 40000, 0.02)) spawnAlien();
-
-        for (let alienIndex = alienEnemies.length - 1; alienIndex >= 0; alienIndex -= 1) {
-            const alien = alienEnemies[alienIndex];
-            alien.y += alien.speed;
-            let destroyed = false;
-
-            for (let bulletIndex = playerBullets.length - 1; bulletIndex >= 0; bulletIndex -= 1) {
-                const bullet = playerBullets[bulletIndex];
-                const hit = bullet.x < alien.x + alien.width &&
-                    bullet.x + bullet.width > alien.x &&
-                    bullet.y < alien.y + alien.height &&
-                    bullet.y + bullet.height > alien.y;
-
-                if (!hit) continue;
-                alien.hp -= 1;
-                playerBullets.splice(bulletIndex, 1);
-
-                if (alien.hp <= 0) {
-                    explosions.push({
-                        x: alien.x + alien.width / 2,
-                        y: alien.y + alien.height / 2,
-                        radius: 1,
-                        maxRadius: 16
-                    });
-                    alienEnemies.splice(alienIndex, 1);
-                    score += 150;
-                    destroyed = true;
-                    playRetroBeep(900, 0.06);
-                    break;
-                }
-            }
-
-            if (destroyed) continue;
-
-            const playerHit = playerShip.x < alien.x + alien.width &&
-                playerShip.x + playerShip.width > alien.x &&
-                playerShip.y < alien.y + alien.height &&
-                playerShip.y + playerShip.height > alien.y;
-
-            if (alien.y + alien.height > gameHeight || playerHit) {
-                gameOver();
+        for (const section of observedSections) {
+            if (section.getBoundingClientRect().top <= activationLine) {
+                activeSection = section;
+            } else {
                 break;
             }
         }
 
-        for (let index = explosions.length - 1; index >= 0; index -= 1) {
-            explosions[index].radius += 2;
-            if (explosions[index].radius > explosions[index].maxRadius) {
-                explosions.splice(index, 1);
+        const activeHash = `#${activeSection.id}`;
+
+        [...navLinks, ...mobileNavLinks].forEach((link) => {
+            const active = link.getAttribute('href') === activeHash;
+
+            link.classList.toggle('is-active', active);
+
+            if (active) {
+                link.setAttribute('aria-current', 'location');
+            } else {
+                link.removeAttribute('aria-current');
+            }
+        });
+    }
+
+    function updateScrollUI() {
+        const scrollableHeight =
+            document.documentElement.scrollHeight - window.innerHeight;
+
+        const progress = scrollableHeight > 0
+            ? (window.scrollY / scrollableHeight) * 100
+            : 0;
+
+        if (progressBar) {
+            progressBar.style.width =
+                `${Math.min(100, Math.max(0, progress))}%`;
+        }
+
+        // Navbar berubah menjadi pill setelah Tech Stack menutupi
+        // sekitar 30% bagian Hero.
+        if (siteHeader && techStackSection && heroSection) {
+            const techTop =
+                techStackSection.getBoundingClientRect().top;
+
+            const shouldFloat =
+                techTop <= window.innerHeight * 0.7;
+
+            siteHeader.classList.toggle('is-floating', shouldFloat);
+        }
+
+        updateActiveNavigation();
+
+        scrollTicking = false;
+    }
+
+    function requestScrollUpdate() {
+        if (scrollTicking) return;
+
+        scrollTicking = true;
+
+        window.requestAnimationFrame(updateScrollUI);
+    }
+
+    window.addEventListener(
+        'scroll',
+        requestScrollUpdate,
+        { passive: true }
+    );
+
+    window.addEventListener(
+        'resize',
+        requestScrollUpdate,
+        { passive: true }
+    );
+
+    window.addEventListener(
+        'hashchange',
+        requestScrollUpdate
+    );
+
+    updateScrollUI();
+
+    // ---------------------------------------------------------------
+    // MOBILE NAVIGATION
+    // ---------------------------------------------------------------
+
+    const mobileMenu = $('mobileMenu');
+    const mobileMenuToggle = $('mobileMenuToggle');
+    const mobileMenuClose = $('mobileMenuClose');
+
+    let menuIsOpen = false;
+
+    function openMobileMenu() {
+        if (!mobileMenu || menuIsOpen) return;
+
+        menuIsOpen = true;
+
+        mobileMenu.inert = false;
+        mobileMenu.setAttribute('aria-hidden', 'false');
+        mobileMenu.classList.add('is-open');
+
+        mobileMenuToggle?.setAttribute(
+            'aria-expanded',
+            'true'
+        );
+
+        document.body.classList.add('menu-open');
+
+        mobileMenuClose?.focus();
+    }
+
+    function closeMobileMenu(restoreFocus = true) {
+        if (!mobileMenu || !menuIsOpen) return;
+
+        menuIsOpen = false;
+
+        mobileMenu.classList.remove('is-open');
+        mobileMenu.setAttribute('aria-hidden', 'true');
+        mobileMenu.inert = true;
+
+        mobileMenuToggle?.setAttribute(
+            'aria-expanded',
+            'false'
+        );
+
+        document.body.classList.remove('menu-open');
+
+        if (restoreFocus) {
+            mobileMenuToggle?.focus();
+        }
+    }
+
+    mobileMenuToggle?.addEventListener('click', () => {
+        menuIsOpen
+            ? closeMobileMenu(false)
+            : openMobileMenu();
+    });
+
+    mobileMenuClose?.addEventListener(
+        'click',
+        () => closeMobileMenu()
+    );
+
+    mobileMenu?.addEventListener('click', (event) => {
+        if (event.target === mobileMenu) {
+            closeMobileMenu();
+        }
+    });
+
+    mobileMenu?.querySelectorAll('[data-menu-link]').forEach((link) => {
+        link.addEventListener('click', () => {
+            closeMobileMenu(false);
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && menuIsOpen) {
+            closeMobileMenu();
+        }
+    });
+
+    // ---------------------------------------------------------------
+    // TECH STACK DRAG AND DROP
+    // Mouse, pen, touch and keyboard support.
+    // Reorder within a lane or move across lanes.
+    // ---------------------------------------------------------------
+
+    const techStackBoard = $('techStackBoard');
+    const techStackStatus = $('techStackStatus');
+
+    if (techStackBoard) {
+        let pendingDrag = null;
+
+        const DRAG_THRESHOLD = 7;
+
+        function announceTechMove(item, list) {
+            const lane = list.closest('[data-tech-lane]');
+
+            const laneName =
+                lane?.dataset.techLane === 'frontend'
+                    ? 'Frontend'
+                    : 'Backend';
+
+            const position = [
+                ...list.querySelectorAll('[data-tech-item]')
+            ].indexOf(item) + 1;
+
+            if (techStackStatus) {
+                techStackStatus.textContent =
+                    `${item.querySelector('.tech-item__name')?.textContent || 'Item'} dipindahkan ke ${laneName}, posisi ${position}.`;
             }
         }
 
-        drawGame();
-        if (gameRunning) animationFrameId = window.requestAnimationFrame(updateGame);
-    }
+        function beginPointerDrag(event, state) {
+            const item = state.item;
+            const rect = item.getBoundingClientRect();
 
-    const keysHeld = new Set();
-    const joystickBase = $('joystickBase');
-    const joystickStick = $('joystickStick');
-    let isJoystickDragging = false;
-    let activePointerId = null;
-    const maxStickDistance = 30;
+            const placeholder = document.createElement('div');
 
-    function updateKeyboardVelocity() {
-        if (isJoystickDragging) return;
-        playerShip.vx = 0;
-        playerShip.vy = 0;
-        if (keysHeld.has('arrowleft') || keysHeld.has('a')) playerShip.vx -= playerShip.speed;
-        if (keysHeld.has('arrowright') || keysHeld.has('d')) playerShip.vx += playerShip.speed;
-        if (keysHeld.has('arrowup') || keysHeld.has('w')) playerShip.vy -= playerShip.speed;
-        if (keysHeld.has('arrowdown') || keysHeld.has('s')) playerShip.vy += playerShip.speed;
+            placeholder.className = 'tech-item-placeholder';
+            placeholder.setAttribute('aria-hidden', 'true');
 
-        // Keep diagonal movement consistent with horizontal/vertical movement.
-        if (playerShip.vx !== 0 && playerShip.vy !== 0) {
-            playerShip.vx *= Math.SQRT1_2;
-            playerShip.vy *= Math.SQRT1_2;
-        }
-    }
+            placeholder.style.width = `${rect.width}px`;
+            placeholder.style.height = `${rect.height}px`;
 
-    function handleJoystickMove(clientX, clientY) {
-        if (!joystickBase) return;
-        const rect = joystickBase.getBoundingClientRect();
-        let deltaX = clientX - (rect.left + rect.width / 2);
-        let deltaY = clientY - (rect.top + rect.height / 2);
-        const distance = Math.hypot(deltaX, deltaY);
+            item.parentElement.insertBefore(placeholder, item);
 
-        if (distance > maxStickDistance) {
-            deltaX = (deltaX / distance) * maxStickDistance;
-            deltaY = (deltaY / distance) * maxStickDistance;
+            item.classList.add('is-dragging');
+
+            item.style.position = 'fixed';
+            item.style.left = `${rect.left}px`;
+            item.style.top = `${rect.top}px`;
+            item.style.width = `${rect.width}px`;
+            item.style.height = `${rect.height}px`;
+            item.style.margin = '0';
+            item.style.pointerEvents = 'none';
+            item.style.transition = 'none';
+
+            state.placeholder = placeholder;
+            state.offsetX = event.clientX - rect.left;
+            state.offsetY = event.clientY - rect.top;
+            state.active = true;
+
+            document.body.classList.add('tech-dragging');
         }
 
-        if (joystickStick) joystickStick.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-        playerShip.vx = (deltaX / maxStickDistance) * playerShip.speed;
-        playerShip.vy = (deltaY / maxStickDistance) * playerShip.speed;
-    }
+        techStackBoard.addEventListener('pointerdown', (event) => {
+            const item = event.target.closest('[data-tech-item]');
 
-    function resetJoystick() {
-        if (!isJoystickDragging) return;
-        isJoystickDragging = false;
-        activePointerId = null;
-        if (joystickStick) joystickStick.style.transform = 'translate(0px, 0px)';
-        playerShip.vx = 0;
-        playerShip.vy = 0;
-    }
+            if (
+                !item ||
+                !techStackBoard.contains(item) ||
+                (event.pointerType === 'mouse' && event.button !== 0)
+            ) {
+                return;
+            }
 
-    function startGame() {
-        if (!canvas || !context) return;
-        resizeCanvas();
-        resetGame();
-        gameRunning = true;
-        if (startOverlay) startOverlay.classList.add('hidden');
-        updateGame();
-    }
+            // Di touch/pen, drag dimulai dari grip.
+            // Area lain tetap dapat dipakai untuk scroll halaman.
+            if (
+                event.pointerType !== 'mouse' &&
+                !event.target.closest('.tech-item__grip')
+            ) {
+                return;
+            }
 
-    startGameBtn?.addEventListener('click', startGame);
+            pendingDrag = {
+                item,
+                pointerId: event.pointerId,
+                startX: event.clientX,
+                startY: event.clientY,
+                active: false,
+                originList: item.parentElement,
+                originNext: item.nextElementSibling
+            };
+        });
 
-    joystickBase?.addEventListener('pointerdown', (event) => {
-        if (!gameRunning) return;
-        event.preventDefault();
-        isJoystickDragging = true;
-        activePointerId = event.pointerId;
-        try {
-            joystickBase.setPointerCapture(event.pointerId);
-        } catch (error) {
-            // Pointer capture is optional on older browsers.
-        }
-        handleJoystickMove(event.clientX, event.clientY);
-    });
+        document.addEventListener('pointermove', (event) => {
+            if (
+                !pendingDrag ||
+                event.pointerId !== pendingDrag.pointerId
+            ) {
+                return;
+            }
 
-    window.addEventListener('pointermove', (event) => {
-        if (isJoystickDragging && event.pointerId === activePointerId) {
-            handleJoystickMove(event.clientX, event.clientY);
-        }
-    });
+            const state = pendingDrag;
 
-    window.addEventListener('pointerup', resetJoystick);
-    window.addEventListener('pointercancel', resetJoystick);
-    window.addEventListener('blur', () => {
-        keysHeld.clear();
-        resetJoystick();
-        updateKeyboardVelocity();
-    });
+            const distance = Math.hypot(
+                event.clientX - state.startX,
+                event.clientY - state.startY
+            );
 
-    window.addEventListener('keydown', (event) => {
-        if (!gameRunning || event.target.closest('input, textarea, select, button, [contenteditable="true"]')) return;
-        const key = event.key.toLowerCase();
-        if (['arrowleft', 'arrowright', 'arrowup', 'arrowdown', 'a', 'd', 'w', 's'].includes(key)) {
+            if (!state.active) {
+                if (distance < DRAG_THRESHOLD) return;
+
+                beginPointerDrag(event, state);
+            }
+
             event.preventDefault();
-            keysHeld.add(key);
-            updateKeyboardVelocity();
-        }
-    });
 
-    window.addEventListener('keyup', (event) => {
-        const key = event.key.toLowerCase();
-        if (keysHeld.delete(key)) updateKeyboardVelocity();
-    });
+            state.item.style.left =
+                `${event.clientX - state.offsetX}px`;
 
-    if (canvas && context) {
-        resizeCanvas();
-        if ('ResizeObserver' in window) {
-            const canvasResizeObserver = new ResizeObserver(resizeCanvas);
-            canvasResizeObserver.observe(canvas.parentElement);
-        } else {
-            window.addEventListener('resize', resizeCanvas, { passive: true });
+            state.item.style.top =
+                `${event.clientY - state.offsetY}px`;
+
+            const element = document.elementFromPoint(
+                event.clientX,
+                event.clientY
+            );
+
+            const targetLane =
+                element?.closest('[data-tech-lane]');
+
+            const targetList =
+                targetLane?.querySelector('[data-tech-list]');
+
+            techStackBoard
+                .querySelectorAll('.tech-lane.is-drop-target')
+                .forEach((lane) => {
+                    lane.classList.remove('is-drop-target');
+                });
+
+            if (
+                !targetList ||
+                !techStackBoard.contains(targetList)
+            ) {
+                return;
+            }
+
+            targetLane.classList.add('is-drop-target');
+
+            const targetItem =
+                element.closest('[data-tech-item]');
+
+            if (
+                targetItem &&
+                targetItem !== state.item &&
+                targetItem.parentElement === targetList
+            ) {
+                const rect = targetItem.getBoundingClientRect();
+
+                const after =
+                    event.clientY > rect.top + rect.height / 2 ||
+                    (
+                        Math.abs(
+                            event.clientY - (rect.top + rect.height / 2)
+                        ) < 8 &&
+                        event.clientX > rect.left + rect.width / 2
+                    );
+
+                targetList.insertBefore(
+                    state.placeholder,
+                    after ? targetItem.nextSibling : targetItem
+                );
+            } else if (
+                element.closest('[data-tech-list]') ||
+                targetLane
+            ) {
+                // Drop di area kosong akan menambahkan item ke akhir list.
+                if (
+                    state.placeholder.parentElement !== targetList ||
+                    !targetList.lastElementChild ||
+                    state.placeholder !== targetList.lastElementChild
+                ) {
+                    targetList.appendChild(state.placeholder);
+                }
+            }
+        }, { passive: false });
+
+        function finishPointerDrag(event, cancelled = false) {
+            if (
+                !pendingDrag ||
+                event.pointerId !== pendingDrag.pointerId
+            ) {
+                return;
+            }
+
+            const state = pendingDrag;
+            pendingDrag = null;
+
+            techStackBoard
+                .querySelectorAll('.tech-lane.is-drop-target')
+                .forEach((lane) => {
+                    lane.classList.remove('is-drop-target');
+                });
+
+            if (
+                state.active &&
+                state.placeholder?.isConnected
+            ) {
+                if (cancelled) {
+                    state.placeholder.remove();
+
+                    state.originList.insertBefore(
+                        state.item,
+                        state.originNext?.parentElement === state.originList
+                            ? state.originNext
+                            : null
+                    );
+                } else {
+                    state.placeholder.replaceWith(state.item);
+
+                    announceTechMove(
+                        state.item,
+                        state.item.parentElement
+                    );
+                }
+            }
+
+            state.item.classList.remove('is-dragging');
+
+            [
+                'position',
+                'left',
+                'top',
+                'width',
+                'height',
+                'margin',
+                'pointerEvents',
+                'transition'
+            ].forEach((property) => {
+                state.item.style[property] = '';
+            });
+
+            document.body.classList.remove('tech-dragging');
         }
+
+        document.addEventListener('pointerup', (event) => {
+            finishPointerDrag(event, false);
+        });
+
+        document.addEventListener('pointercancel', (event) => {
+            finishPointerDrag(event, true);
+        });
+
+        // Keyboard support:
+        // Arrow keys = reorder.
+        // Alt + Left/Right = move to another category.
+        techStackBoard.addEventListener('keydown', (event) => {
+            const item = event.target.closest('[data-tech-item]');
+            if (!item) return;
+
+            const list = item.parentElement;
+
+            const otherList = techStackBoard.querySelector(
+                `[data-tech-list]:not(#${list.id})`
+            );
+
+            if (
+                event.altKey &&
+                (
+                    event.key === 'ArrowLeft' ||
+                    event.key === 'ArrowRight'
+                )
+            ) {
+                event.preventDefault();
+
+                if (otherList) {
+                    otherList.appendChild(item);
+                    item.focus();
+
+                    announceTechMove(item, otherList);
+                }
+
+                return;
+            }
+
+            if (
+                ![
+                    'ArrowUp',
+                    'ArrowDown',
+                    'ArrowLeft',
+                    'ArrowRight'
+                ].includes(event.key)
+            ) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const siblings = [
+                ...list.querySelectorAll('[data-tech-item]')
+            ];
+
+            const index = siblings.indexOf(item);
+
+            const backwards =
+                event.key === 'ArrowUp' ||
+                event.key === 'ArrowLeft';
+
+            const neighbour =
+                siblings[index + (backwards ? -1 : 1)];
+
+            if (!neighbour) return;
+
+            if (backwards) {
+                list.insertBefore(item, neighbour);
+            } else {
+                list.insertBefore(item, neighbour.nextSibling);
+            }
+
+            item.focus();
+            announceTechMove(item, list);
+        });
     }
 
-    // ---------------------------------------------------------------------
-    // CONTACT FORM. Keeps the original /send endpoint and SweetAlert2 toast.
-    // ---------------------------------------------------------------------
+    // ---------------------------------------------------------------
+    // PROJECT DETAIL POPUP
+    // ---------------------------------------------------------------
+
+    function openProjectDetails(projectKey) {
+        const project = SITE_CONFIG.projects[projectKey];
+        if (!project) return;
+
+        if (typeof Swal === 'undefined') {
+            console.warn(
+                'SweetAlert2 belum tersedia; periksa /vendor/sweetalert2.all.min.js.'
+            );
+            return;
+        }
+
+        Swal.fire({
+            title: project.title,
+            text: project.description,
+            imageUrl: project.image,
+            imageAlt: `Preview ${project.title}`,
+            imageWidth: '100%',
+            imageHeight: 'auto',
+            confirmButtonText: 'Close preview',
+            showCloseButton: true,
+            customClass: {
+                popup: 'portfolio-swal-popup'
+            }
+        });
+    }
+
+    document.querySelectorAll('[data-project]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const projectKey = button.dataset.project;
+            const project = SITE_CONFIG.projects[projectKey];
+
+            if (!project?.url) return;
+
+            window.location.href = project.url;
+        });
+    });
+
+    // ---------------------------------------------------------------
+    // CONTACT FORM
+    // Existing POST /send endpoint is preserved.
+    // ---------------------------------------------------------------
+
     const contactForm = $('contactForm');
     const submitButton = $('btnSubmitContact');
     const formResponse = $('formResponse');
-    const originalSubmitMarkup = submitButton?.innerHTML || '';
+
+    const originalSubmitMarkup =
+        submitButton?.innerHTML || '';
 
     function showContactToast(icon, title) {
         if (typeof Swal === 'undefined') {
             if (formResponse) {
                 formResponse.textContent = title;
-                formResponse.classList.remove('hidden');
+                formResponse.hidden = false;
             }
+
             return;
         }
 
@@ -850,18 +903,15 @@ document.addEventListener('DOMContentLoaded', () => {
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
-            timer: 3000,
+            timer: 3200,
             timerProgressBar: true,
-            theme: 'dark',
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
+            theme: 'dark'
         }).fire({ icon, title });
     }
 
     contactForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
+
         if (!contactForm.reportValidity()) return;
 
         const username = $('username')?.value.trim() || '';
@@ -870,15 +920,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (submitButton) {
             submitButton.disabled = true;
-            submitButton.setAttribute('aria-busy', 'true');
-            submitButton.textContent = 'TRANSMITTING...';
+
+            submitButton.setAttribute(
+                'aria-busy',
+                'true'
+            );
+
+            submitButton.innerHTML = `
+                <span>Sending...</span>
+                <i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i>
+            `;
         }
 
         try {
             const response = await fetch('/send', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, message })
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username,
+                    email,
+                    message
+                })
             });
 
             if (!response.ok) {
@@ -886,21 +950,38 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            showContactToast('success', 'Pesan telah terkirim, Terimakasih!');
+
+            showContactToast(
+                'success',
+                'Pesan berhasil dikirim. Terima kasih!'
+            );
+
             if (formResponse) {
-                formResponse.textContent = 'Pesan berhasil dikirim.';
-                formResponse.classList.remove('hidden');
+                formResponse.textContent =
+                    'Pesan berhasil dikirim. Terima kasih sudah menghubungi saya.';
+
+                formResponse.hidden = false;
             }
+
             contactForm.reset();
+
             console.info('Pesan berhasil dikirim.', data);
-            playRetroBeep(880, 0.15);
+
         } catch (error) {
-            showContactToast('error', 'Pesan gagal dikirim. Silakan coba lagi.');
-            if (formResponse) {
-                formResponse.textContent = 'Pesan gagal dikirim. Silakan coba lagi.';
-                formResponse.classList.remove('hidden');
-            }
             console.error('Gagal mengirim pesan:', error);
+
+            showContactToast(
+                'error',
+                'Pesan gagal dikirim. Silakan coba lagi.'
+            );
+
+            if (formResponse) {
+                formResponse.textContent =
+                    'Pesan gagal dikirim. Silakan coba lagi.';
+
+                formResponse.hidden = false;
+            }
+
         } finally {
             if (submitButton) {
                 submitButton.disabled = false;
@@ -910,21 +991,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Preserve the original short transition before opening social destinations.
-    document.addEventListener('click', (event) => {
-        const targetLink = event.target.closest('.link-delayed');
-        if (!targetLink || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();
-        const destination = targetLink.href;
-        const delay = prefersReducedMotion ? 0 : 300;
-        window.setTimeout(() => {
-            window.location.assign(destination);
-        }, delay);
-    });
+    // ---------------------------------------------------------------
+    // FOOTER YEAR
+    // ---------------------------------------------------------------
 
-    // Final first-frame canvas paint and AOS refresh after the page is ready.
+    const currentYear = $('currentYear');
+
+    if (currentYear) {
+        currentYear.textContent = String(new Date().getFullYear());
+    }
+
+    // ---------------------------------------------------------------
+    // FINAL REFRESH
+    // ---------------------------------------------------------------
+
     window.addEventListener('load', () => {
-        drawGame();
-        if (typeof AOS !== 'undefined') AOS.refresh();
+        if (typeof AOS !== 'undefined') {
+            AOS.refresh();
+        }
+
+        updateScrollUI();
     }, { once: true });
 });
