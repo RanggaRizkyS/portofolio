@@ -74,15 +74,13 @@ app.post('/send', limiter, async (req, res) => {
 
 //sitemap
 app.get('/sitemap.xml', (req, res) => {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  const xml= `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.ranggarizky.my.id/</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <priority>1.0000</priority>
   </url>
-</urlset>`;
+</urlset>`
 
   res.setHeader('Content-Type', 'application/xml; charset=utf-8');
   res.setHeader('Cache-Control', 'public, max-age=86400');
